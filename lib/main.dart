@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.amberAccent,
       ),
-      initialRoute: 'login',
+      initialRoute: 'home',
       routes: {
         'register': (context) => RegisterPage(),
         'login': (context) => const LoginPage(),
