@@ -79,9 +79,38 @@ class FirebaseService {
       String userId = _auth.currentUser!.uid;
       String fileName = Timestamp.now().millisecondsSinceEpoch.toString() +
           p.extension(image.path);
+      UploadTask task = _storage.ref('images/$userId/$fileName').putFile(image);
+      return await task.then((snapshot) async {
+        String downloadURL = await snapshot.ref.getDownloadURL();
+        await _db.collection(POSTS_COLLECTION).add({
+          "userId": userId,
+          "timestamp": Timestamp.now(),
+          "image": downloadURL,
+        });
+        return true;
+      });
     } catch (e) {
       print(e);
       return false;
     }
+  }
+
+  Stream<QuerySnapshot> getPostsForUser() {
+    String userID = _auth.currentUser!.uid;
+    return _db
+        .collection(POSTS_COLLECTION)
+        .where('userId', isEqualTo: userID)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getLatestPosts() {
+    return _db
+        .collection(POSTS_COLLECTION)
+        .orderBy('timestamp', descending: true)
+        .snapshots();
+  }
+
+  Future<void> logout() async {
+    await _auth.signOut();
   }
 }
