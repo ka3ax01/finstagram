@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:finstagram/services/firebase_service.dart';
+import 'package:get_it/get_it.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,22 +14,36 @@ class LoginPageState extends State<LoginPage> {
   double? _deviceWidth, _deviceHeight;
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   String? _email, _password;
+  //FirebaseService? _firebaseService;
+
+  @override
+  void initState() {
+    super.initState();
+    // _firebaseService = GetIt.instance.get<FirebaseService>();
+    // print(_firebaseService);
+  }
+
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _titleText(),
-            _loginForm(),
-            _loginButton(),
-            _registrationLink()
-          ],
+      body: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: _deviceWidth! * 0.05,
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _titleText(),
+              _loginForm(),
+              _loginButton(),
+              _registrationLink()
+            ],
+          ),
         ),
       ),
     );
@@ -112,9 +128,14 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _loginUser() {
+  void _loginUser() async {
     if (_loginFormKey.currentState!.validate()) {
       _loginFormKey.currentState!.save();
+      //   bool result = await _firebaseService!.loginUser(
+      //     email: _email!,
+      //     password: _password!,
+      //   );
+      //   if (result) Navigator.popAndPushNamed(context, 'home');
     }
   }
 

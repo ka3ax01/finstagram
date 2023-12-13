@@ -26,11 +26,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.amberAccent,
       ),
-      initialRoute: 'home',
+      initialRoute: 'login',
       routes: {
         'register': (context) => RegisterPage(),
         'login': (context) => const LoginPage(),
-        'home': (context) => HomePage(),
+        //'home': (context) => HomePage(),
       },
     );
   }

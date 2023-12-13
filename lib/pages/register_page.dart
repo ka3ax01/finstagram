@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:finstagram/services/firebase_service.dart';
+import 'package:get_it/get_it.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -15,6 +17,14 @@ class RegisterPageState extends State<RegisterPage> {
   String? _email, _name, _password;
   File? _image;
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  FirebaseService? _firebaseService;
+
+  @override
+  void initState() {
+    super.initState();
+    _firebaseService = GetIt.instance.get<FirebaseService>();
+  }
+
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
@@ -22,17 +32,22 @@ class RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: Colors.amberAccent,
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _titleText(),
-              _profileImageWidget(),
-              _registrationForm(),
-              _registrationButton(),
-            ],
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: _deviceWidth! * 0.05,
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _titleText(),
+                _profileImageWidget(),
+                _registrationForm(),
+                _registrationButton(),
+              ],
+            ),
           ),
         ),
       ),
@@ -43,14 +58,17 @@ class RegisterPageState extends State<RegisterPage> {
     return const Text(
       "Finstagram",
       style: TextStyle(
-          color: Colors.black, fontSize: 25, fontWeight: FontWeight.w600),
+        color: Colors.black,
+        fontSize: 25,
+        fontWeight: FontWeight.w600,
+      ),
     );
   }
 
   Widget _registrationButton() {
     return MaterialButton(
-      minWidth: _deviceWidth! * 0.7,
-      height: _deviceHeight! * 0.06,
+      minWidth: _deviceWidth! * 0.5,
+      height: _deviceHeight! * 0.05,
       color: Colors.grey,
       onPressed: _registerUser,
       child: const Text(
@@ -64,19 +82,27 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void _registerUser() {
+  void _registerUser() async {
     if (_globalKey.currentState!.validate() && _email != null) {
       _globalKey.currentState!.save();
+      bool result = await _firebaseService!.registerUser(
+        name: _name!,
+        email: _email!,
+        password: _password!,
+        image: _image!,
+      );
+      if (result) Navigator.pop(context);
     }
   }
 
   Widget _registrationForm() {
     return SizedBox(
       width: _deviceWidth! * 0.8,
+      height: _deviceHeight! * 0.3,
       child: Form(
         key: _globalKey,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

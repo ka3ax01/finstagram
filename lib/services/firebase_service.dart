@@ -5,8 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-final String USER_COLLECTION = 'users';
-final String POSTS_COLLECTION = 'posts';
+const String USER_COLLECTION = 'users';
+const String POSTS_COLLECTION = 'posts';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
