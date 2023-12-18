@@ -24,26 +24,28 @@ class FirebaseService {
     required File image,
   }) async {
     try {
-      UserCredential userCredential =
+      final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      String userId = userCredential.user!.uid;
-      String fileName = Timestamp.now().millisecondsSinceEpoch.toString() +
-          p.extension(image.path);
-      UploadTask task = _storage.ref('images/$userId/$fileName').putFile(image);
-      return task.then((snapshot) async {
+      final String userId = userCredential.user!.uid;
+      final String fileName =
+          Timestamp.now().millisecondsSinceEpoch.toString() +
+              p.extension(image.path);
+      final UploadTask task =
+          _storage.ref('images/$userId/$fileName').putFile(image);
+      await task.then((snapshot) async {
         String downloadURL = await snapshot.ref.getDownloadURL();
         await _db.collection(USER_COLLECTION).doc(userId).set({
           "name": name,
           "email": email,
           "image": downloadURL,
         });
-        return true;
       });
+      return true;
     } catch (e) {
-      print(e);
+      print("Registration error: $e");
       return false;
     }
   }
@@ -64,24 +66,27 @@ class FirebaseService {
         return false;
       }
     } catch (e) {
-      print(e);
+      print("Login Error: $e");
       return false;
     }
   }
 
   Future<Map> getUserData({required String uid}) async {
-    DocumentSnapshot doc = await _db.collection(USER_COLLECTION).doc(uid).get();
+    final DocumentSnapshot doc =
+        await _db.collection(USER_COLLECTION).doc(uid).get();
     return doc.data() as Map;
   }
 
   Future<bool> postImage(File image) async {
     try {
-      String userId = _auth.currentUser!.uid;
-      String fileName = Timestamp.now().millisecondsSinceEpoch.toString() +
-          p.extension(image.path);
-      UploadTask task = _storage.ref('images/$userId/$fileName').putFile(image);
+      final String userId = _auth.currentUser!.uid;
+      final String fileName =
+          Timestamp.now().millisecondsSinceEpoch.toString() +
+              p.extension(image.path);
+      final UploadTask task =
+          _storage.ref('images/$userId/$fileName').putFile(image);
       return await task.then((snapshot) async {
-        String downloadURL = await snapshot.ref.getDownloadURL();
+        final String downloadURL = await snapshot.ref.getDownloadURL();
         await _db.collection(POSTS_COLLECTION).add({
           "userId": userId,
           "timestamp": Timestamp.now(),
@@ -90,13 +95,13 @@ class FirebaseService {
         return true;
       });
     } catch (e) {
-      print(e);
+      print("Post Image Error: $e");
       return false;
     }
   }
 
   Stream<QuerySnapshot> getPostsForUser() {
-    String userID = _auth.currentUser!.uid;
+    final String userID = _auth.currentUser!.uid;
     return _db
         .collection(POSTS_COLLECTION)
         .where('userId', isEqualTo: userID)

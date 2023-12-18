@@ -3,6 +3,8 @@ import 'package:finstagram/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return HomePageState();

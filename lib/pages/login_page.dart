@@ -131,11 +131,11 @@ class LoginPageState extends State<LoginPage> {
   void _loginUser() async {
     if (_loginFormKey.currentState!.validate()) {
       _loginFormKey.currentState!.save();
-      //   bool result = await _firebaseService!.loginUser(
-      //     email: _email!,
-      //     password: _password!,
-      //   );
-      //   if (result) Navigator.popAndPushNamed(context, 'home');
+      // bool result = await _firebaseService!.loginUser(
+      //   email: _email!,
+      //   password: _password!,
+      // );
+      // if (result) Navigator.popAndPushNamed(context, 'home');
     }
   }
 

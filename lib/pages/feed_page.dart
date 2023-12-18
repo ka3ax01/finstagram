@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finstagram/services/firebase_service.dart';
+// ignore: unused_import
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 
@@ -24,7 +25,7 @@ class FeedPageState extends State<FeedPage> {
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
-    return Container(
+    return SizedBox(
       height: _deviceHeight!,
       width: _deviceWidth!,
       child: _postsListView(),

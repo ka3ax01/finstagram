@@ -8,11 +8,15 @@ import 'package:get_it/get_it.dart';
 import 'services/firebase_service.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  GetIt.instance.registerSingleton<FirebaseService>(
-    FirebaseService(),
-  );
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    GetIt.instance.registerSingleton<FirebaseService>(
+      FirebaseService(),
+    );
+  } catch (e) {
+    print("Firebase initilizing Error: $e");
+  }
   runApp(const MyApp());
 }
 
@@ -30,7 +34,7 @@ class MyApp extends StatelessWidget {
       routes: {
         'register': (context) => RegisterPage(),
         'login': (context) => const LoginPage(),
-        //'home': (context) => HomePage(),
+        'home': (context) => HomePage(),
       },
     );
   }
