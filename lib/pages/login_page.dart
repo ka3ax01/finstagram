@@ -14,13 +14,13 @@ class LoginPageState extends State<LoginPage> {
   double? _deviceWidth, _deviceHeight;
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   String? _email, _password;
-  //FirebaseService? _firebaseService;
+  FirebaseService? _firebaseService;
 
   @override
   void initState() {
     super.initState();
-    // _firebaseService = GetIt.instance.get<FirebaseService>();
-    // print(_firebaseService);
+    _firebaseService = GetIt.instance.get<FirebaseService>();
+    print(_firebaseService);
   }
 
   @override
@@ -131,18 +131,18 @@ class LoginPageState extends State<LoginPage> {
   void _loginUser() async {
     if (_loginFormKey.currentState!.validate()) {
       _loginFormKey.currentState!.save();
-      // bool result = await _firebaseService!.loginUser(
-      //   email: _email!,
-      //   password: _password!,
-      // );
-      // if (result) Navigator.popAndPushNamed(context, 'home');
+      bool result = await _firebaseService!.loginUser(
+        email: _email!,
+        password: _password!,
+      );
+      if (result) Navigator.popAndPushNamed(context, '/home');
     }
   }
 
   Widget _registrationLink() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'register');
+        Navigator.pushNamed(context, '/register');
       },
       child: const Text(
         "Don't have account?",
