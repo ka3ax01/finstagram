@@ -30,19 +30,23 @@ class FirebaseService {
         password: password,
       );
       final String userId = userCredential.user!.uid;
+      print("UserId: $userId");
       final String fileName =
           Timestamp.now().millisecondsSinceEpoch.toString() +
               p.extension(image.path);
+      print("FileName: $fileName");
       final UploadTask task =
           _storage.ref('images/$userId/$fileName').putFile(image);
       await task.then((snapshot) async {
         String downloadURL = await snapshot.ref.getDownloadURL();
+        print("DownloadURL: $downloadURL");
         await _db.collection(USER_COLLECTION).doc(userId).set({
           "name": name,
           "email": email,
           "image": downloadURL,
         });
       });
+      print("Firebase sent files");
       return true;
     } catch (e) {
       print("Registration error: $e");

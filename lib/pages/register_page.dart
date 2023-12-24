@@ -6,6 +6,8 @@ import 'package:finstagram/services/firebase_service.dart';
 import 'package:get_it/get_it.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return RegisterPageState();
@@ -83,7 +85,7 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   void _registerUser() async {
-    if (_globalKey.currentState!.validate()) {
+    if (_globalKey.currentState!.validate() && _image != null) {
       _globalKey.currentState!.save();
       bool result = await _firebaseService!.registerUser(
         name: _name!,
@@ -170,15 +172,11 @@ class RegisterPageState extends State<RegisterPage> {
     var imageProvider = _image != null
         ? FileImage(_image!)
         : const NetworkImage("https://i.pravatar.cc/300");
-    // if (_image != null) {
-    //   _image = const NetworkImage("https://i.pravatar.cc/300");
-    // }
     return GestureDetector(
       onTap: () {
         FilePicker.platform.pickFiles(type: FileType.image).then((value) {
           setState(() {
             _image = File(value!.files.first.path!);
-            print('Image values is set to be $_image');
           });
         });
       },

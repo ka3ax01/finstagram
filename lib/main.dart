@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/register': (context) => RegisterPage(),
         '/login': (context) => const LoginPage(),
-        '/home': (context) => HomePage(),
+        '/home': (context) => const HomePage(),
       },
     );
   }
